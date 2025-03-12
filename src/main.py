@@ -17,7 +17,7 @@ if model and vectorizer:
     print("Modèle chargé avec succès !")
 
     # Tester avec un commentaire long
-    comment = "Tsy ratsy kosa ilay izy anh"
+    comment = "Tsy mahay mintsy ilay modely"
     prediction = predict_long_comment(comment, model, vectorizer)
     
     # Afficher le résultat

@@ -1,2 +1,4 @@
-src1/data/dataset_sentiment.csv
-src/data/dataset.csv
+src1/data/*
+src/data/*
+src/*
+src1/*
