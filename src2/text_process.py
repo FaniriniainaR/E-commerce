@@ -5,8 +5,9 @@ from collections import Counter
 import numpy as np
 
 STOPWORDS_MALAGASY = {
-    "ny", "fa", "tsy", "dia", "izany", "ve", "no", "hoe",
-    "satria", "efa", "mbola", "tokony", "ho", "an", "ary"
+    "ny", "fa", "dia", "izany", "ve", "no", "hoe", "de", "na", "a", "i", "an", "amin", "izao", "izay", "izany", "izy", "izaho",
+    "satria", "efa", "mbola", "tokony", "ho", "an", "ary", "ka", "misy", "ireo", "ireny", "ireo",
+    "nandritra", "ireny",
 }
 
 def nettoyer_texte(texte: str) -> str:
