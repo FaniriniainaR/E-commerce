@@ -76,21 +76,17 @@ WSGI_APPLICATION = 'ecommerce_site.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'sql_server.pyodbc',  # Utilisation de l'engine SQL Server
-        'NAME': 'eCommerce',  # Nom de votre base de données (mettez le nom correct ici)
-        'USER': '',  # Laissez vide pour Windows Authentication (utilisateur Windows actuel)
-        'PASSWORD': '',  # Laissez vide pour Windows Authentication
-        'HOST': 'DPUMG21BQ9Y1911',  # Nom ou adresse IP du serveur SQL
-        'PORT': '',  # Le port par défaut est 1433, donc vous pouvez le laisser vide
-
+        'ENGINE': 'mssql',
+        'NAME': 'eCommerce',
+        'HOST': 'DPUMG21BQ9Y1911',
+        'PORT': '1433',  # Important : spécifier explicitement le port
         'OPTIONS': {
-            'driver': 'ODBC Driver 18 for SQL Server',  # Assurez-vous que ce driver est installé
-            'TrustServerCertificate': 'yes',  # Ignorer les erreurs SSL
-            'authentication': 'ActiveDirectoryMsi',  # Authentification Windows Active Directory (MSI)
+            'driver': 'ODBC Driver 18 for SQL Server',
+            'authentication': 'ActiveDirectoryMsi',
+            'extra_params': 'TrustServerCertificate=yes'
         },
     }
 }
-
 
 
 
