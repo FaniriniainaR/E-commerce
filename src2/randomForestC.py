@@ -107,19 +107,29 @@ class RandomForestCustom:
         Prédit le label pour un échantillon donné à partir d'un arbre.
         
         Args:
-            tree (dict): Structure de l'arbre
+            tree (dict ou int): Structure de l'arbre ou un label direct
             x (array-like): Échantillon à prédire
             
         Returns:
-            str: Label prédit
+            int: Label prédit
         """
         x_dense = x.toarray().flatten() if hasattr(x, "toarray") else x.flatten()
-        if "feature" in tree:
+
+        # Si on atteint une feuille (label directement retourné)
+        if isinstance(tree, int):
+            return tree
+        
+        # Vérifiez d'abord que l'arbre est un dictionnaire avant de chercher "feature"
+        if isinstance(tree, dict) and "feature" in tree:
             if x_dense[tree["feature"]] > 0:
                 return self.predict_tree(tree["left"], x)
             else:
                 return self.predict_tree(tree["right"], x)
+        
+        # Si l'arbre ne correspond à aucun cas attendu, retourner un label par défaut
         return tree
+
+
     
     def predict(self, X):
         """

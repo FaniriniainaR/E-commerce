@@ -4,7 +4,7 @@ import pandas as pd
 from deep_translator import GoogleTranslator
 
 # 📌 Charger le dataset
-file_path = "src2/data/test.csv"  # Remplace par le chemin vers ton fichier CSV
+file_path = "test.csv"  # Remplace par le chemin vers ton fichier CSV
 try:
     df = pd.read_csv(file_path, encoding='utf-8')
 except UnicodeDecodeError:
@@ -31,7 +31,7 @@ translator = GoogleTranslator(source='auto', target='mg')
 # Listes pour stocker résultats et erreurs
 textes_malagasy = []
 erreurs = []
-output_file = "src2/data/DataSetMalgache1.csv"  # Chemin de sortie
+output_file = "DataSetMalgache.csv"  # Chemin de sortie
 
 # Fonction asynchrone pour traiter une ligne
 async def process_row(index, row):
@@ -61,7 +61,7 @@ async def main():
     results = await asyncio.gather(*tasks)
     return results
 
-if __name__ == "__main__":
+if _name_ == "__main__":
     # Lancer la boucle événementielle asyncio
     results = asyncio.run(main())
 

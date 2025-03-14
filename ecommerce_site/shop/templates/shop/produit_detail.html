@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ produit.nom }}</title>
+</head>
+<body>
+    <h1>{{ produit.nom }}</h1>
+    <p>Prix : {{ produit.prix }}€</p>
+    <p>Description : {{ produit.description }}</p>
+
+    <h2>Commentaires</h2>
+    <ul>
+        {% for commentaire in commentaires %}
+            <li><strong>{{ commentaire.utilisateur }}</strong> : {{ commentaire.commentaire }} ({{ commentaire.date_ajout }})</li>
+        {% empty %}
+            <p>Aucun commentaire pour ce produit.</p>
+        {% endfor %}
+    </ul>
+
+    {% if not request.session.a_paye %}
+        <p>Vous devez effectuer un paiement pour ajouter un commentaire.</p>
+        <a href="{% url 'paiement_simule' produit.id %}">Effectuer le paiement</a>
+    {% else %}
+        <h3>Ajouter un commentaire</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Envoyer</button>
+        </form>
+    {% endif %}
+
+    <a href="{% url 'liste_produits' %}">Retour à la liste</a>
+</body>
+</html>

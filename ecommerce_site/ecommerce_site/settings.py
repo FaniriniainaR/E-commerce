@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -52,10 +53,14 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'ecommerce_site.urls'
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,15 +81,8 @@ WSGI_APPLICATION = 'ecommerce_site.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'mssql',
-        'NAME': 'eCommerce',
-        'HOST': 'DPUMG21BQ9Y1911',
-        'PORT': '1433',  # Important : spécifier explicitement le port
-        'OPTIONS': {
-            'driver': 'ODBC Driver 18 for SQL Server',
-            'authentication': 'ActiveDirectoryMsi',
-            'extra_params': 'TrustServerCertificate=yes'
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db/db.sqlite3',  # Nom du fichier SQLite (stocké localement)
     }
 }
 

@@ -1,0 +1,15 @@
+<h1>Mon Panier</h1>
+<ul>
+    {% for produit_id, details in panier.items %}
+    <li>
+        {{ details.nom }} - {{ details.prix }}€ x {{ details.quantite }}
+    </li>
+    {% endfor %}
+</ul>
+
+<p>Total : {{ total }}€</p>
+
+<a href="{% url 'paiement_simule' %}">Acheter</a>
+
+<!-- Avec paramètre produit_id -->
+<a href="{% url 'paiement_simule' produit_id=1 %}">Payer et retourner au produit</a>

@@ -6,14 +6,17 @@ import pandas as pd
 positif_comments = [
     "Tsara be ilay vokatra", "Faly amin'ny vokatra", "Tena tsara ilay vokatra",
     "Vokatra manara-penitra", "Tena mahafinaritra", "Izany no vokatra tiako",
-    "Ilay vokatra dia tena ilaina", "Mahafaly ahy ilay izy", "faly aho tamin'ny vokatra", "Tsara fatohizo", "Tsy ratsy", "tsy de ratsy"
+    "Ilay vokatra dia tena ilaina", "Mahafaly ahy ilay izy", "faly aho tamin'ny vokatra", "Tsara fatohizo", "Tsy ratsy", "tsy de ratsy",
+    "Vokatra tsara"
 ]
 
 negatif_comments = [
     "Tsy mahafinaritra ilay vokatra", "Mampalahelo fa tsy niasa ilay izy",
     "Tena tsy nety mihitsy", "Vokatra ratsy", "Misy olana goavana amin'ity vokatra ity",
     "Vokatra tsy manara-penitra", "Ity vokatra ity dia tsy tonga amin'ny fotoana",
-    "Tsy nandeha tsara ilay izy", "Masosotra"
+    "Tsy nandeha tsara ilay izy", "Masosotra","Tena ratsy", "Tsy tsara", "Masosotra", "Mankaleo", "Mampalahelo", "Tsy tiako",
+    "Tsy tiako ilay vokatra", "Vokatra ratsy", "Tsy mahafinaritra", "Tsy nety", "Tsy niasa", "Tsy nety mihitsy", "Tsy nety mihitsy ilay vokatra",
+    "Tsy mahafam-po ilay vokatra", 
 ]
 
 neutre_comments = [
@@ -39,11 +42,11 @@ def generate_comments(num_comments):
     return data
 
 # Générer 1 million de commentaires
-num_comments = 500
+num_comments = 1500
 comments_data = generate_comments(num_comments)
 
 # Convertir en DataFrame et sauvegarder en CSV
 df = pd.DataFrame(comments_data, columns=["Commentaire", "Label"])
-df.to_csv("src/data/dataset.csv", index=False, encoding='utf-8')
+df.to_csv("src2/data/dataset.csv", index=False, encoding='utf-8')
 
 print("Fichier CSV créé avec succès : dataset.csv")

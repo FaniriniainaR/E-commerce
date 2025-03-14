@@ -1,71 +1,44 @@
-import time
-import random
 import pandas as pd
-from deep_translator import GoogleTranslator
 
-# 📌 Charger le deuxième dataset (celui avec "Text" et "Sentiment")
-try:
-    df2 = pd.read_csv("src2/data/test2.csv", encoding="utf-8")
-except UnicodeDecodeError:
-    df2 = pd.read_csv("src2/data/test2.csv", encoding="ISO-8859-1") # Si UTF-8 échoue, essaie ISO-8859-1
-
-# 📌 Initialiser le traducteur pour traduire en malgache
-translator = GoogleTranslator(source='auto', target='mg')
-
-# 📌 Traduire les textes du deuxième dataset
-texts_malagasy_2 = []
-erreurs_2 = []
-
-for i, row in df2.iterrows():
-    texte = row["Text"]
-    sentiment = row["Sentiment"]  # Garder le sentiment intact
+def split_dataframe(df, max_rows_per_sheet=1048576):
+    """
+    Divise un DataFrame en chunks respectant la limite de lignes par feuille Excel
+    """
+    chunks = []
+    total_rows = len(df)
+    current_start = 0
     
-    try:
-        traduction = translator.translate(texte)
-        if not traduction:
-            raise ValueError("Traduction retournée vide")
-    except Exception as e:
-        print(f"❌ Erreur sur '{texte[:50]}...' : {e}")
-        traduction = "Erreur de traduction"
-        erreurs_2.append(texte)
+    while current_start < total_rows:
+        chunk_size = min(max_rows_per_sheet, total_rows - current_start)
+        chunks.append(df.iloc[current_start:current_start + chunk_size])
+        current_start += chunk_size
+    
+    return chunks
 
-    texts_malagasy_2.append((traduction, sentiment))
+# Charger le fichier Excel
+file_path = 'src2/data/datasetBig.xlsx'  # Remplacez par le bon chemin vers votre fichier
+df = pd.read_excel(file_path)
 
-    # 📌 Pause aléatoire pour éviter le blocage
-    time.sleep(random.uniform(3, 6))
+# Séparer les commentaires par un point
+df['comment'] = df['comment'].str.split('.')
 
-# 📌 Ajouter les traductions et le sentiment au deuxième dataset
-df2["Text_malagasy"], df2["Sentiment"] = zip(*texts_malagasy_2)
+# Trouver la longueur maximale de la liste de commentaires dans chaque ligne
+max_len = df['comment'].apply(len).max()
 
-# 📌 Ajouter les colonnes manquantes pour correspondre au premier dataset
-df2["Source"] = df2["Source"]
-df2["Date/Time"] = pd.NA
-df2["User ID"] = pd.NA
-df2["Location"] = pd.NA
-df2["Confidence Score"] = pd.NA
+# Remplir les autres colonnes pour chaque commentaire séparé
+df_expanded = df.explode('comment')
 
-# 📌 Charger le premier dataset déjà traduit
-df1 = pd.read_csv("src2/data/DataSetMalgache.csv", encoding="utf-8")
+# Remplir les autres colonnes en dupliquant les valeurs
+df_expanded = df_expanded.reset_index(drop=True)
 
-# 📌 Ajuster les colonnes pour que ce soit similaire à df2
-df1 = df1.rename(columns={'text_malagasy': 'Text', 'sentiment': 'Sentiment'})  # Adapter les colonnes du premier dataset
-df1['Source'] = pd.NA
-df1['Date/Time'] = pd.NA
-df1['User ID'] = pd.NA
-df1['Location'] = pd.NA
-df1['Confidence Score'] = pd.NA
+# Diviser le DataFrame en chunks respectant la limite Excel
+chunks = split_dataframe(df_expanded)
 
-# 📌 Combiner les deux datasets
-df_combined = pd.concat([df1, df2], ignore_index=True, sort=False)
+# Sauvegarder dans un nouveau fichier Excel
+output_path = 'src2/data/split_comments.xlsx'
+with pd.ExcelWriter(output_path) as writer:
+    for idx, chunk in enumerate(chunks, start=1):
+        chunk.to_excel(writer, sheet_name=f'Sheet{idx}', index=False)
+        print(f"Feuille {idx} sauvegardée ({len(chunk)} lignes)")
 
-# 📌 Sauvegarder le dataset combiné
-output_combined_file = "src2/data/dataset_combine_traduits.csv"
-df_combined.to_csv(output_combined_file, index=False, encoding="utf-8")
-print(f"✅ Datasets combinés et enregistrés sous '{output_combined_file}'")
-
-# 📌 Sauvegarder les erreurs pour les retraduire plus tard
-if erreurs_2:
-    with open("src2/data/erreurs_traduction_2.txt", "w", encoding="utf-8") as f:
-        for err in erreurs_2:
-            f.write(err + "\n")
-    print(f"⚠️ {len(erreurs_2)} textes n'ont pas pu être traduits dans le deuxième dataset. Vérifie 'erreurs_traduction_2.txt'.")
+print(f"\nFichier sauvegardé dans {output_path}")
