@@ -64,7 +64,7 @@ def main():
     
     # Sauvegarde du modèle et du vectorizer
     joblib.dump((rf, vectorizer), "src2/models/random_forest_malagasy.pkl")
-    print("✅ Modèle entraîné et sauvegardé avec succès !")
+    print("Modèle entraîné et sauvegardé avec succès !")
 
     # Évaluation de la performance
     y_pred = rf.predict(X_test)

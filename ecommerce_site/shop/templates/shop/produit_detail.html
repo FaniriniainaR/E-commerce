@@ -3,6 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ produit.nom }}</title>
+    <style>
+        .sentiment-positif {
+            color: green;
+            background-color: #d4edda; /* Vert clair */
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .sentiment-neutre {
+            color: brown;
+            background-color: #f5f5f5; /* Gris clair */
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .sentiment-negatif {
+            color: red;
+            background-color: #f8d7da; /* Rouge clair */
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .commentaire {
+            font-style: italic; /* Texte en italique */
+            color: black; /* Texte en noir */
+        }
+    </style>
 </head>
 <body>
     <h1>{{ produit.nom }}</h1>
@@ -10,24 +35,50 @@
     <p>Description : {{ produit.description }}</p>
 
     <h2>Commentaires</h2>
-    <ul>
-        {% for commentaire in commentaires %}
-            <li><strong>{{ commentaire.utilisateur }}</strong> : {{ commentaire.commentaire }} ({{ commentaire.date_ajout }})</li>
-        {% empty %}
-            <p>Aucun commentaire pour ce produit.</p>
-        {% endfor %}
-    </ul>
-
-    {% if not request.session.a_paye %}
-        <p>Vous devez effectuer un paiement pour ajouter un commentaire.</p>
-        <a href="{% url 'paiement_simule' produit.id %}">Effectuer le paiement</a>
+    {% if commentaires %}
+        <ul>
+            {% for commentaire in commentaires %}
+                <li>
+                    <strong>{{ commentaire.utilisateur }}</strong> : 
+                    <span class="commentaire">
+                        {{ commentaire.commentaire }}
+                    </span>
+                    ({{ commentaire.date_ajout }})
+                    <span class="
+                        {% if commentaire.sentiment == 'Positif' %}
+                            sentiment-positif
+                        {% elif commentaire.sentiment == 'Neutre' %}
+                            sentiment-neutre
+                        {% elif commentaire.sentiment == 'Négatif' %}
+                            sentiment-negatif
+                        {% endif %}
+                    ">
+                        [{{ commentaire.sentiment }}]
+                    </span>
+                </li>
+            {% endfor %}
+        </ul>
     {% else %}
+        <p>Aucun commentaire pour ce produit.</p>
+    {% endif %}
+
+    {% if request.session.a_paye %}
         <h3>Ajouter un commentaire</h3>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
+            
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            {% endfor %}
+            
             <button type="submit">Envoyer</button>
         </form>
+    {% else %}
+        <p>Vous devez effectuer un paiement pour ajouter un commentaire.</p>
+        <a href="{% url 'paiement_simule' produit.id %}">Effectuer le paiement</a>
     {% endif %}
 
     <a href="{% url 'liste_produits' %}">Retour à la liste</a>
