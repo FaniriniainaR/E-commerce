@@ -4,14 +4,15 @@ import os
 import joblib
 
 # Ajouter le chemin vers le dossier "src2" à sys.path
-sys.path.append('D:/ESMIA/IA/Exercice/E-commerce/src2')
+sys.path.append('D:/Utilisateurs/faniriniaina.rakoto/OneDrive - Axian Group/Documents/Exercice/IA/RandomForest/E-commerce/src2')
 
 # Importer le modèle après avoir ajouté le chemin
 from randomForestC import *  # Utilise le bon nom de module pour ton modèle
 from text_process import nettoyer_texte
 
 # Charger le modèle et le vectorizer
-chemin_modele = "D:/ESMIA/IA/Exercice/E-commerce/src2/models/random_forest_malagasy.pkl"
+# chemin_modele = "D:/ESMIA/IA/Exercice/E-commerce/src2/models/random_forest_malagasy.pkl"
+chemin_modele = "D:/Utilisateurs/faniriniaina.rakoto/OneDrive - Axian Group/Documents/Exercice/IA/RandomForest/E-commerce/src2/models/random_forest_malagasy.pkl"
 
 try:
     rf_model, vectorizer = joblib.load(chemin_modele)

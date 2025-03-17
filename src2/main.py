@@ -16,6 +16,6 @@ def tester_commentaire(commentaire: str) -> str:
     return label_map.get(prediction[0], "Inconnu")
 
 # Test d'un commentaire
-commentaire_test = "Tsy afam-po tamin'ilay vokatra na dia mora ny vidiny"
+commentaire_test = "Niteny ilay famaritana hoe hotian'ny vadiko ilay izy kinajo tsia"
 resultat = tester_commentaire(commentaire_test)
 print(f"Le commentaire '{commentaire_test}' est classé comme : {resultat}")

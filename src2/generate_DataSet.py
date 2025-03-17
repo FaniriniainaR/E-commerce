@@ -129,7 +129,7 @@ def generate_comments(num_comments):
     return data
 
 # Générer 1 million de commentaires
-num_comments = 10000
+num_comments = 100000
 comments_data = generate_comments(num_comments)
 
 # Convertir en DataFrame et sauvegarder en CSV
